@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+	<meta charset="utf-8">
+	<title>Ultimate List Maker</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<style>
+            
+	* {margin:0; padding:10px; text-align:center; }  
+	body {width:80%; margin:40px auto; min-width: 400px; max-width: 600px}
+	header {background:red}
+	#counters {background:lightgreen;font-weight: bold; font-size: 150%;display: flex; justify-content: space-around; flex-wrap: wrap}
+	button {background: #ff9999; width: 100px; }
+	main {background:yellow; min-height: 80px}
+	footer {background:lightblue}
+	button:hover {background: pink}
+	li {list-style: none; font-weight: bold; font-size: 150%}
+	.complete {color: red; text-decoration: line-through}
+
+  </style>
+	</head>
+<body>
+
+<header><h1 id="header">The Ultimate List Maker</h1></header>
+
+<div id="counters">
+  <p>Items Active <span id="active"></span></p>
+  <p>Items Completed <span id="completed"></span></p>	
+</div>
+
+<main>
+	
+  <ul></ul>
+  
+<button id="showForm">Add New Item</button>
+  
+  <form id="newItemForm">
+    <input type="text" id="itemDescription" placeholder="Add description">
+    <input type="submit" id="add" value="add">
+  </form>
+
+</main>
+
+<footer><h2>Making lists since 2018</h2></footer>
+
+<script>
+
+$(function(){
+	//variable definitions
+	var item = '';
+	var $list = $('ul');
+	var $newItemButton = $('#showForm');
+	var $newItemForm = $('#newItemForm');
+	var $textInput = $('input:text');
+
+	//init show and hide
+	$newItemButton.show();
+	$newItemForm.hide();
+
+	function updateCount(){
+		var items = $('li[class!=complete]').length;
+		$('span#active').text(items);
+		var doneitems = $('li[class=complete]').length;
+		$('span#completed').text(doneitems);
+	};
+
+	//when button clicked...
+	$('#showForm').on('click', function(){
+		//button is hidden, form is shown
+		$newItemButton.hide();
+		$newItemForm.show();
+	});
+
+	//when form is submitted...
+	$newItemForm.on('submit', function(e){
+		//prevents page from refreshing
+		e.preventDefault();
+		//get text, then adds to list
+		var newText = $textInput.val();
+		if(newText != ''){
+			$list.prepend('<li>' + newText + '</li>');
+			//reset form and button
+			$newItemForm.hide();
+			$newItemButton.show();
+			$textInput.val('');
+			updateCount();
+		}
+	});
+
+	$list.on('click', 'li', function(){
+		var $this = $(this);
+		var complete = $this.hasClass('complete');
+
+		if(complete === true){
+			$this.animate({
+				opacity: 0.0,
+				paddingLeft: '+=180'
+			}, 500, 'swing', function(){
+				$this.remove();
+			});
+		} else {
+			item = $this.text();
+			$this.remove();
+			$list
+				.append('<li class=\"complete\">' + item + '</li>')
+				.hide().fadeIn(300);
+			updateCount();
+		};
+	});
+
+	$('li').hide().each(function(index){
+		$(this).delay(450 * index).fadeIn(1600);
+	});
+
+});
+
+	
+</script>
+
+</body>	
+
+</html>

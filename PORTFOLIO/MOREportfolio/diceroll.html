@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <meta charset="utf-8">
+    <head>
+    <title>Roll a Die!</title>
+    <style>
+        html{background-color: #333;
+            color:white;
+            font-family:"Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;}
+        
+        div{float:left;}
+        .dice{
+            width:150px;
+            height:150px;
+            background-color:white;
+            border-radius:10px;
+            padding:5px;
+            margin:10px;
+        }
+        .dot{
+            width:30px;
+            height:30px;
+            background-color:black;
+            border-radius:30px;
+            margin:10px;
+        }
+        .nodot{
+            width:30px;
+            height:30px;
+            background-color:transparent;
+            border-radius:30px;
+            margin:10px;
+        }
+        p{
+            transition:ease-out 180ms;
+            position:fixed;
+            bottom:0;
+            padding:10px;
+            font-size:20px;
+            border: #666 2px solid;
+            background-color: #333;
+            border-radius:30px;
+            opacity:80%;
+        }
+        p:hover {
+            transition:ease-in 180ms;
+            opacity:100%;
+        }
+    </style>
+</head>
+<body>
+
+<div id="position"></div>
+
+<p id="totalRead"></p>
+
+
+<script>
+
+/*debated moving this into its own js file and just sourcing it in but you know what. just hover over the line that script is on (38) and click the arrow down and you don"t even have to look at this mess. i dont blame you*/
+
+
+var usernum = Number(prompt("How many dice would you like to roll? "));
+var total = 0;
+
+for(var i=0;i<usernum;i++){
+
+    var die = document.createElement("div");
+    die.className = "dice";
+    for (let i = 0; i < 9; i++) {
+        var txt = document.createElement("div");
+        txt.className = "nodot";
+        die.appendChild(txt);
+    }
+    var place = document.getElementById("position");
+    place.appendChild(die);
+    
+    var dotSpot = die.getElementsByClassName("nodot");
+
+/* HOW DOT SPOT ACTUALLY WORKS: a hopefully-understandable explanation
+  (mostly for me bc i"ll forget)
+  dotSpot is an index of all "nodot"s. when a "nodot" is changed to a
+  "dot", it is removed from the index.
+  thus when i say dotSpot[4], it will be the center...but if i call 
+  dotSpot[5] after, it won"t be the middle right, but bottom LEFT.
+   
+  why?? every spot on the die is floated. if one element is changed from 
+  "nodot" to "dot", it is taken off of the dotSpot index and is treated 
+  like any other float element...
+  
+  now dotSpot[num] will not refer to the element you changed to "dot",
+  but the /next space/ because it is the NEW dotSpot[num]. if you can see
+  it (class: "dot"), dotSpot will skip over it.
+  
+  if you change [4], dotSpot automatically updates its list. when you
+  change [5], you are changing the /new/ 5th spot, because 
+  every index number has moved down one. that"s why there are
+  repeat calls to certain spots. dotSpot automatically updates, and
+  calling the SAME NUMBER is actually referring to the NEW SPOT. every
+  index number just sliiiiides to the right!
+ */
+
+    var randnum = Math.floor(Math.random()*6)+1;
+
+    switch (randnum) {
+        /*dotSpot is an index of all "nodot"s. to grab a specific spot, use dotSpot[index number]. remember that only invisible spaces are counted!*/
+    case 1:
+        dotSpot[4].className = "dot";
+        
+        total=total+1;
+        break;
+
+    case 2:
+        var flip = Math.floor(Math.random()*2)+1;
+        if (flip==1){
+            dotSpot[0].className = "dot";
+            dotSpot[7].className = "dot";
+        }else{
+            dotSpot[2].className = "dot";
+            dotSpot[5].className = "dot";
+        }
+        
+        total=total+2;
+        break;
+
+    case 3:
+        var flip = Math.floor(Math.random()*2)+1;
+
+        if (flip==1){
+            dotSpot[2].className = "dot";
+            dotSpot[3].className = "dot";
+            dotSpot[4].className = "dot";
+        }else{
+            dotSpot[0].className = "dot";
+            dotSpot[3].className = "dot";
+            dotSpot[6].className = "dot";
+        }
+        
+        total=total+3;
+        break;
+
+    case 4: 
+        dotSpot[0].className = "dot";
+        dotSpot[1].className = "dot";
+        dotSpot[4].className = "dot";
+        dotSpot[5].className = "dot";
+        
+        total=total+4;
+        break;
+
+    case 5:
+        dotSpot[0].className = "dot";
+        dotSpot[1].className = "dot";
+        dotSpot[2].className = "dot";
+        dotSpot[3].className = "dot";
+        dotSpot[4].className = "dot";
+        
+        total=total+5;
+        break;
+
+    case 6: 
+        dotSpot[0].className = "dot";
+        dotSpot[1].className = "dot";
+        dotSpot[1].className = "dot";
+        dotSpot[2].className = "dot";
+        dotSpot[2].className = "dot";
+        dotSpot[3].className = "dot";
+
+        total=total+6;
+        break;
+    default:
+        break;
+    }
+
+}
+
+//i am so smart
+document.getElementById("totalRead").textContent = "You rolled "+usernum+" dice. The total of your dice is "+total+"!";
+
+/*thanks for listening (reading?) in. i have no idea how this looks on chrome inspect bc i"m lame and use edge bc i have windows. anyway. i love missing how you are Supposed to do it or the Easier Way bc i"m a blockhead and make everything harder for myself (im joking)(i do not feel bad abt myself)(im very funny thank you) */
+
+</script>
+
+</body>
+</html>
