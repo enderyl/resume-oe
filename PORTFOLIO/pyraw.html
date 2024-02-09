@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!--USE PYSCRIPT TO LINK THIS PAGE TO A WEB BROWSER TO EXECUTE-->
+<html>
+    <head>
+        <script defer src="https://pyscript.net/releases/2023.03.1/pyscript.js"></script>
+        <link rel="stylesheet" href="https://pyscript.net/releases/2023.03.1/pyscript.css">
+    </head>
+    <body>
+        <py-config>
+            [[fetch]]
+            files = ['py8oe.py']
+            from = 'MOREportfolio'
+            to_folder = 'PORTFOLIO'
+        </py-config>
+        <py-script>
+            with open("PORTFOLIO/py8oe.py", 'r', encoding='utf-8') as f:
+                print(f.read())
+        </py-script>
+    </body>
+</html>
